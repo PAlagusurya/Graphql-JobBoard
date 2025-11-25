@@ -1,3 +1,4 @@
+# Top-level fields are marked as nullable to ensure that when a client queries multiple fields, a null value in one field doesn’t impact the successful resolution of the others.
 type Query {
   jobs: [Job!]
   job(id: ID!): Job
@@ -8,6 +9,7 @@ type Company {
   id: ID!
   name: String!
   description: String
+  jobs: [Job!]!
 }
 
 type Job {
