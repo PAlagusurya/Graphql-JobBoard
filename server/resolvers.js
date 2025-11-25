@@ -1,4 +1,11 @@
-import { createJob, getJob, getJobByCompany, getJobs } from "./db/jobs.js";
+import {
+  createJob,
+  deleteJob,
+  getJob,
+  getJobByCompany,
+  getJobs,
+  updateJob,
+} from "./db/jobs.js";
 import { getCompany } from "./db/companies.js";
 import { GraphQLError } from "graphql";
 
@@ -25,6 +32,10 @@ export const resolvers = {
     createJob: (_root, { input: { title, description } }) => {
       const companyId = "FjcJCHJALA4i";
       return createJob({ companyId, title, description });
+    },
+    deleteJob: (_root, { id }) => deleteJob(id),
+    updateJob: (_root, { input: { id, title, description } }) => {
+      return updateJob({ id, title, description });
     },
   },
 
