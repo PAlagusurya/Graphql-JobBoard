@@ -29,10 +29,8 @@ export const resolvers = {
   },
 
   Mutation: {
-    createJob: (_root, { input: { title, description } }) => {
-      const companyId = "FjcJCHJALA4i";
-      return createJob({ companyId, title, description });
-    },
+    createJob: (_root, { input: { title, description } }, user) =>
+      createJob({ companyId: user.companyId, title, description }),
     deleteJob: (_root, { id }) => deleteJob(id),
     updateJob: (_root, { input: { id, title, description } }) => {
       return updateJob({ id, title, description });
