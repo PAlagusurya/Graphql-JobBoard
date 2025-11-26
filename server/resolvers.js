@@ -29,8 +29,12 @@ export const resolvers = {
   },
 
   Mutation: {
-    createJob: (_root, { input: { title, description } }, user) =>
-      createJob({ companyId: user.companyId, title, description }),
+    createJob: (_root, { input: { title, description } }, user) => {
+      if (!user) {
+        throw UnauthorizedError("Missing credentials");
+      }
+      createJob({ companyId: user.companyId, title, description });
+    },
     deleteJob: (_root, { id }) => deleteJob(id),
     updateJob: (_root, { input: { id, title, description } }) => {
       return updateJob({ id, title, description });
@@ -54,5 +58,11 @@ function toISODate(value) {
 function notFoundError(message) {
   throw new GraphQLError(message, {
     extensions: { code: "NOT_FOUND" },
+  });
+}
+
+function UnauthorizedError(message) {
+  throw new GraphQLError(message, {
+    extensions: { code: "UNAUTHORIZED" },
   });
 }
