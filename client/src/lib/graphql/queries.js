@@ -48,7 +48,7 @@ const jobDetailFragment = gql`
   }
 `;
 
-const jobByIdQuery = gql`
+export const jobByIdQuery = gql`
   query getJobById($id: ID!) {
     job(id: $id) {
       ...JobDetail
@@ -69,6 +69,21 @@ export const companyByIdQuery = gql`
         date
         description
       }
+    }
+  }
+`;
+
+export const getJobsQuery = gql`
+  query {
+    jobs {
+      id
+      date
+      title
+      company {
+        id
+        name
+      }
+      description
     }
   }
 `;
@@ -97,38 +112,4 @@ export async function createJob({ title, description }) {
     },
   });
   return data.job;
-}
-
-export async function getJob(id) {
-  const { data } = await apolloClient.query({
-    query: jobByIdQuery,
-    variables: {
-      id,
-    },
-  });
-  return data.job;
-}
-
-export async function getJobs() {
-  const query = gql`
-    query {
-      jobs {
-        id
-        date
-        title
-        company {
-          id
-          name
-        }
-        description
-      }
-    }
-  `;
-
-  const { data } = await apolloClient.query({
-    query,
-    // To fetch the data from the server
-    fetchPolicy: "network-only",
-  });
-  return data.jobs;
 }
