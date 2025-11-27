@@ -33,7 +33,7 @@ export const resolvers = {
       if (!user) {
         throw UnauthorizedError("Missing credentials");
       }
-      createJob({ companyId: user.companyId, title, description });
+      return createJob({ companyId: user.companyId, title, description });
     },
     deleteJob: async (_root, { id }, user) => {
       if (!user) {
