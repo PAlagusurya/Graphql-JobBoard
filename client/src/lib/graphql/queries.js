@@ -30,7 +30,7 @@ const httpLink = new HttpLink({
   uri: "http://localhost:9000/graphql",
 });
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
@@ -57,6 +57,22 @@ const jobByIdQuery = gql`
   ${jobDetailFragment}
 `;
 
+export const companyByIdQuery = gql`
+  query getCompanyById($id: ID!) {
+    company(id: $id) {
+      id
+      name
+      description
+      jobs {
+        id
+        title
+        date
+        description
+      }
+    }
+  }
+`;
+
 export async function createJob({ title, description }) {
   const mutation = gql`
     mutation createJob($input: createJobInput!) {
@@ -81,27 +97,6 @@ export async function createJob({ title, description }) {
     },
   });
   return data.job;
-}
-
-export async function getCompany(id) {
-  const query = gql`
-    query getCompanyById($id: ID!) {
-      company(id: $id) {
-        id
-        name
-        description
-        jobs {
-          id
-          title
-          date
-          description
-        }
-      }
-    }
-  `;
-
-  const { data } = await apolloClient.query({ query, variables: { id } });
-  return data.company;
 }
 
 export async function getJob(id) {
